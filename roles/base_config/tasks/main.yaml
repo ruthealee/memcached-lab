@@ -1,0 +1,25 @@
+- name: Check OS
+  fail: msg="Please use Redhat 6 or CentOS 6"
+  when: ansible_os_family != 'RedHat'
+    
+- name: Configuring IUS Repo CentOS 6
+  when: ansible_distribution == 'CentOS'
+  yum:
+   name: https://centos6.iuscommunity.org/ius-release.rpm
+   state: present
+
+- name: Configuring IUS Repo RHEL 6
+  when: ansible_distribution == 'RHEL'
+  yum: 
+    name: "{{ item }}" 
+  with_items:
+    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+    - https://rhel6.iuscommunity.org/ius-release.rpm
+    state: present
+    
+- name: Installing packages
+  yum: 
+    name: httpd,mysql-server,php56u,php56u-mysqlnd,memcached,php56u-pecl-memcache 
+    state: present 
+
+

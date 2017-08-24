@@ -1,0 +1,26 @@
+---
+# This playbook deploys the full lab
+#
+
+- name: configure packages and repos
+  hosts: all
+  remote_user: root
+
+  roles:
+    - base_config    
+
+- name: setup the lab environment
+  hosts: all
+  remote_user: root
+
+  roles:
+    - lab_setup
+
+- name: breakfix one
+  hosts: all
+  remote_user: root
+  tags: 
+    - breakfix1
+  
+  roles:
+    - breakfix_1

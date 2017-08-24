@@ -1,0 +1,30 @@
+- name: Start services
+  service:
+    name: "{{ item }}"
+    state: started 
+  with_items:
+    - 'httpd'
+    - 'mysqld'
+
+- name: setup mysql user
+  mysql_user:
+    name: 'doguser'
+    host: localhost
+    priv: 'dogs.puppies:SELECT'
+    state: present
+    password: shadow
+
+- name: create initial mysql db
+  mysql_db:
+    name: dogs
+    state: import
+    target: ./dogs.sql
+  
+- name: move the configuration files into place
+  copy:
+    src: "{{ role_path }}/files/*" 
+    dest: /var/www/html/
+    owner: apache
+    group: apache
+    mode: 0775
+
